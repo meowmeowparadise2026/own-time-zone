@@ -147,8 +147,9 @@ async function supabaseRequest(pathname, options = {}) {
     throw new Error(`Supabase request failed: ${response.status} ${text}`);
   }
 
-  if (response.status === 204) return null;
-  return response.json();
+  const text = await response.text();
+  if (!text) return null;
+  return JSON.parse(text);
 }
 
 async function readStore() {
@@ -175,7 +176,7 @@ async function writeStore(store) {
       data: store,
       updated_at: new Date().toISOString(),
     }),
-    headers: { Prefer: "resolution=merge-duplicates" },
+    headers: { Prefer: "resolution=merge-duplicates,return=representation" },
   });
 }
 
