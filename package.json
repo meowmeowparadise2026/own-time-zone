@@ -1,0 +1,12 @@
+{
+  "name": "own-time-zone-online",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Invite-only nine-grid goal board MVP with a built-in Node.js server.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

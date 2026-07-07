@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>own time zone | 線上九宮格目標牆</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="board-area" aria-label="九宮格目標牆">
+        <header class="topbar">
+          <div>
+            <p class="kicker">invite-only online board</p>
+            <h1>own time zone</h1>
+          </div>
+          <div class="invite-status" aria-label="分享狀態">
+            <span class="status-dot"></span>
+            會員同步版
+          </div>
+        </header>
+
+        <div class="board-intro">
+          <p>
+            把今年(或近年)最想慢慢完成的九件事放在這裡。點照片翻面，看見當初寫下的理由與下一步。
+          </p>
+          <div class="friend-strip" id="memberStrip" aria-label="同行朋友"></div>
+        </div>
+
+        <div class="room-bar" id="roomBar" hidden>
+          <label>
+            目前查看
+            <select id="roomSelect"></select>
+          </label>
+          <div class="room-pill" id="roomMode">尚未登入</div>
+        </div>
+
+        <div class="goal-grid" id="goalGrid" aria-label="九宮格"></div>
+      </section>
+
+      <aside class="editor-panel" aria-label="會員、邀請與編輯目標">
+        <section class="panel-section auth-panel" id="authPanel">
+          <div class="panel-heading">
+            <p class="kicker">member login</p>
+            <h2>登入或註冊</h2>
+          </div>
+
+          <div class="auth-tabs" role="tablist" aria-label="會員模式">
+            <button class="is-active" id="showLogin" type="button">登入</button>
+            <button id="showRegister" type="button">註冊</button>
+          </div>
+
+          <form id="loginForm">
+            <label>
+              帳號
+              <input id="loginEmail" type="email" autocomplete="email" placeholder="Email" />
+            </label>
+            <label>
+              密碼
+              <input id="loginPassword" type="password" autocomplete="current-password" placeholder="至少 6 碼" />
+            </label>
+            <button class="primary-button" type="submit">登入</button>
+          </form>
+
+          <form id="registerForm" hidden>
+            <label>
+              名稱
+              <input id="registerName" type="text" maxlength="24" autocomplete="name" placeholder="例如：Vivi" />
+            </label>
+            <label>
+              帳號
+              <input id="registerEmail" type="email" autocomplete="email" placeholder="Email" />
+            </label>
+            <label>
+              密碼
+              <input id="registerPassword" type="password" autocomplete="new-password" placeholder="至少 6 碼" />
+            </label>
+            <button class="primary-button" type="submit">建立帳號</button>
+          </form>
+        </section>
+
+        <section class="panel-section account-panel" id="accountPanel" hidden>
+          <div class="panel-heading compact">
+            <p class="kicker">signed in</p>
+            <h2 id="accountName">會員</h2>
+          </div>
+          <p id="accountEmail"></p>
+          <button class="ghost-button" id="logoutButton" type="button">登出</button>
+        </section>
+
+        <section class="panel-section invite-panel" id="invitePanel" hidden>
+          <div class="panel-heading compact">
+            <p class="kicker">private room</p>
+            <h2>邀請朋友</h2>
+          </div>
+          <p id="inviteHelp">把邀請碼給朋友，她註冊後輸入邀請碼，就能查看你分享的九宮格。</p>
+          <div class="invite-link">
+            <span id="inviteCode">登入後產生</span>
+            <button type="button" id="copyButton">複製</button>
+          </div>
+
+          <form class="join-form" id="joinForm">
+            <label>
+              加入朋友的目標牆
+              <input id="joinCode" type="text" maxlength="12" placeholder="輸入邀請碼" />
+            </label>
+            <button class="ghost-button" type="submit">加入</button>
+          </form>
+        </section>
+
+        <section class="panel-section" id="editorPanel" hidden>
+          <div class="panel-heading">
+            <p class="kicker">slot <span id="slotNumber">01</span></p>
+            <h2>新增目標</h2>
+          </div>
+
+          <form id="goalForm">
+            <label>
+              目標名稱
+              <input id="goalTitle" type="text" maxlength="28" placeholder="例如：穩定運動" />
+            </label>
+
+            <label>
+              細部規劃
+              <textarea
+                id="goalPlan"
+                rows="5"
+                maxlength="2000"
+                placeholder="例如：每週三次，睡前記錄身體感受與心情。"
+              ></textarea>
+            </label>
+
+            <label class="upload-box" for="goalImage">
+              <span>代表圖片</span>
+              <strong id="imageLabel">選擇照片</strong>
+              <em class="upload-status" id="uploadStatus" hidden>已上傳</em>
+              <input id="goalImage" type="file" accept="image/*" />
+            </label>
+
+            <div class="form-row">
+              <label class="checkline">
+                <input id="goalDone" type="checkbox" />
+                <span>已完成</span>
+              </label>
+
+              <label class="checkline">
+                <input id="goalShared" type="checkbox" checked />
+                <span>分享給受邀朋友</span>
+              </label>
+            </div>
+
+            <div class="button-row">
+              <button class="primary-button" type="submit">同步這一格</button>
+              <button class="ghost-button" id="clearButton" type="button">清空</button>
+            </div>
+          </form>
+        </section>
+
+        <p class="message-line" id="messageLine" role="status"></p>
+      </aside>
+    </main>
+
+    <footer class="site-footer">
+      <p>©2026 meow.meow.paradise</p>
+      <p>
+        使用本網站或註冊會員，即表示您同意本網站依
+        <a href="./privacy.html">《隱私權政策》</a>
+        蒐集、處理及利用您所提供之個人資料，並遵守
+        <a href="./terms.html">《使用條款》</a>
+        之相關規範。
+      </p>
+    </footer>
+
+    <template id="goalCardTemplate">
+      <article class="goal-card">
+        <button class="select-tab" type="button" aria-label="編輯這一格"></button>
+        <button class="flip-button" type="button">
+          <span class="card-inner">
+            <span class="card-face card-front">
+              <span class="photo"></span>
+              <span class="front-overlay">
+                <span class="front-title"></span>
+              </span>
+              <span class="done-mark">完成</span>
+            </span>
+            <span class="card-face card-back">
+              <span class="back-meta"></span>
+              <strong class="back-title"></strong>
+              <span class="back-plan"></span>
+              <span class="back-footer"></span>
+            </span>
+          </span>
+        </button>
+      </article>
+    </template>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

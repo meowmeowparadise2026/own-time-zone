@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: own-time-zone
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 24.14.0
+      - key: OTZ_STORE_ID
+        value: main
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
