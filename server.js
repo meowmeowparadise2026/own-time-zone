@@ -124,19 +124,22 @@ function writeLocalStore(store) {
 }
 
 async function supabaseRequest(pathname, options = {}) {
+  const { headers: optionHeaders, ...requestOptions } = options;
+  const separator = pathname.includes("?") ? "&" : "?";
+  const requestPath = `${pathname}${separator}apikey=${encodeURIComponent(SUPABASE_KEY)}`;
   const headers = {
     apikey: SUPABASE_KEY,
     "Content-Type": "application/json",
     Prefer: "return=representation",
-    ...(options.headers || {}),
+    ...(optionHeaders || {}),
   };
   if (isLegacyJwtKey(SUPABASE_KEY)) {
     headers.Authorization = `Bearer ${SUPABASE_KEY}`;
   }
 
-  const response = await fetch(`${SUPABASE_URL}/rest/v1/${pathname}`, {
+  const response = await fetch(`${SUPABASE_URL}/rest/v1/${requestPath}`, {
+    ...requestOptions,
     headers,
-    ...options,
   });
 
   if (!response.ok) {
